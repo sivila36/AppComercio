@@ -7,12 +7,15 @@ const productController = require('../controllers/productController');
 router.post('/', productController.createProduct);
 
 // Obtener todos los productos
-router.get('/', productController.getAllProducts);
+//router.get('/', productController.getAllProducts);
+
+// Obtener algunos productos
+router.get('/', productController.getProducts);
 
 //Con dashboard
 router.get('/dashboard', async (req, res) => {
     try {
-        const products = await productController.getAllProducts(req, res);       //console.log(products);
+        const products = await productController.getAllProducts(req, res);
         res.render('product', { products });
     } catch (err) {
       res.status(500).json({ error: err.message });

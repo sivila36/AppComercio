@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var productSchema = new Schema ({
     name: { type: String, default : "" },
+    description: { type: String },
     category: { 
         type: String,
         enum : ["Perifericos", "Almacenamiento" , "Procesadores", "Fuentes", "Equipos"], 

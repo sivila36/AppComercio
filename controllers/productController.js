@@ -1,3 +1,4 @@
+const Product = require('../models/Product');
 const productService = require('../services/productService');
 
 // Crear un producto
@@ -18,6 +19,20 @@ exports.getAllProducts = async (req, res) => {
   return products;
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getProducts = async (req, res) => {
+  const { category, name } = req.query;
+  let filter = {};
+  if (category) filter.category = category;
+  if (name) filter.name = new RegExp(name, 'i');
+  try {
+      const products = await Product.find(filter);
+      res.render('products', { products });
+  } catch (error) {
+      res.status(500).send('Error fetching products');
+      console.log(error)
   }
 };
 
