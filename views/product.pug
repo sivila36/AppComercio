@@ -1,0 +1,26 @@
+//extends layout
+
+//block content
+//  h1= title
+//  p Welcome to #{title}
+
+doctype html
+html
+  head
+    title Dashboard de Productos
+  body
+    h1 Productos
+    table
+      thead
+        tr
+          th Nombre
+          th Categoria
+          th Stock
+          th Precio
+      tbody
+        each product in products
+          tr
+            td= product.name
+            td= product.category
+            td= product.stock
+            td= product.price
