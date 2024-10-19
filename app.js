@@ -12,7 +12,7 @@ var usersRouter = require("./routes/users");
 var authRouter = require("./routes/auth");
 var productsRouter = require("./routes/products");
 var ordersRouter = require("./routes/orders");
-const cartRoutes = require('./routes/cart');
+var cartRouter = require('./routes/cart');
 
 var app = express();
 
@@ -22,7 +22,7 @@ app.set("view engine", "pug");
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -44,6 +44,7 @@ app.use("/orders", ordersRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/orders", ordersRouter);
+app.use("/cart", cartRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

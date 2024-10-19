@@ -1,4 +1,5 @@
 const Order = require('../models/Order');
+const Product = require('../models/Product');
 
 // Servicio para añadir producto al carrito
 exports.addProductToCart = async (cart, productId, quantity) => {

@@ -1,5 +1,3 @@
-extends layout
-
 block content
   h1 Catalogo Productos
   form(method="get", action="/products")
@@ -12,15 +10,54 @@ block content
       option(value="Fuentes") Fuentes
       option(value="Procesadores") Procesadores
     button(type="submit") Buscar
-    
+
   each product in products
     div.product
       h2= product.name
       p= product.description
       p Precio: $#{product.price}
 
-      form(method="post", action="/cart/add")
-            input(type="hidden", name="productId", value=product._id)
-            label(for="quantity") Cantidad:
-            input(type="number", name="quantity", min="1", value="1")
-            button(type="submit") Agregar al Carrito
+      form(class="add-to-cart-form")
+        input(type="hidden", name="productId", value=product._id)
+        label(for="quantity") Cantidad:
+        input(type="number", name="quantity", min="1", value="1")
+        button(type="submit") Agregar al Carrito
+
+  button(id="view-cart-btn") Ver Carrito
+
+
+script.
+  document.querySelectorAll('.add-to-cart-form').forEach(form => {
+    form.addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      // Usar FormData para recolectar los datos del formulario
+      const formData = new FormData(form);
+      
+      // Convertir FormData a URL-encoded (application/x-www-form-urlencoded)
+      const formBody = Array.from(formData.entries())
+                            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+                            .join('&');
+
+      // Enviar los datos como x-www-form-urlencoded
+      const response = await fetch('/cart/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formBody
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        alert('Producto agregado al carrito');
+      } else {
+        alert('Error al agregar producto al carrito');
+      }
+    });
+  });
+
+
+    document.getElementById('view-cart-btn').addEventListener('click', () => {
+      window.location.href = '/cart';
+    });

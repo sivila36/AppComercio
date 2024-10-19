@@ -3,7 +3,8 @@ const router = express.Router();
 const orderController = require('../controllers/orderController');
 
 router.post('/cart/add', orderController.addToCart);
-router.post('/order/checkout', orderController.checkout);
+router.post('/checkout', orderController.checkout);
+//router.get('/checkout', orderController.checkout);
 
 
 // Crear una orden
