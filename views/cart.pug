@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1 Tu carrito
+  if cart.length
+    each item in cart
+      div.cart-item
+        p= item.name
+        p Cantidad: #{item.quantity}
+        p Precio: $#{item.price * item.quantity}
+    form(method="post", action="/order/checkout")
+      button(type="submit") Pagar
+  else
+    p Tu carrito esta vacio

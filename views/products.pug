@@ -1,4 +1,5 @@
 extends layout
+
 block content
   h1 Catalogo Productos
   form(method="get", action="/products")
@@ -11,8 +12,15 @@ block content
       option(value="Fuentes") Fuentes
       option(value="Procesadores") Procesadores
     button(type="submit") Buscar
+    
   each product in products
     div.product
       h2= product.name
       p= product.description
       p Precio: $#{product.price}
+
+      form(method="post", action="/cart/add")
+            input(type="hidden", name="productId", value=product._id)
+            label(for="quantity") Cantidad:
+            input(type="number", name="quantity", min="1", value="1")
+            button(type="submit") Agregar al Carrito
