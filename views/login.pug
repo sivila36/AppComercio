@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  .login-container
+    h1 Login
+
+    //- Mostrar errores si existen
+    if errors
+      each error in errors
+        error= error.msg
+
+
+    form(action='/auth/login' method='POST')
+      .form-group
+        label(for='email') Correo
+        input.form-control(type='email' name='email' id='email' required)
+      .form-group
+        label(for='password') Contraseña
+        input.form-control(type='password' name='password' id='password' required)
+      button.btn.btn-primary(type='submit') Iniciar sesión
+    
+    .register-link
+      p ¿No tenés cuenta?
+      button.btn.btn-secondary(type='button' onclick="window.location.href='/auth/register'") Regístrate
