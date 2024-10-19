@@ -85,7 +85,7 @@ router.post("/login", async (req, res) => {
 
     // Redirigir según el rol del usuario
     if (user.role === "admin") {
-      res.redirect("/admin");
+      res.redirect("/admin/dashboard");
     } else if (user.role === "client") {
       res.redirect("/products");
     } else {
@@ -132,9 +132,12 @@ router.post("/login", async (req, res) => {
 
 // Ruta de logout
 router.get("/logout", (req, res) => {
-  req.session.destroy();
-  //req.flash('success_msg', 'Has cerrado sesión');
-  res.redirect("/auth/login");
+  req.session.destroy((err) => {
+    if (err) {
+      return res.redirect("/dashboard"); // O a cualquier página si falla el logout
+    }
+    res.clearCookie("connect.sid"); // Asegúrate de limpiar la cookie de sesión
+    res.redirect("/auth/login"); // Redirige al login después de cerrar la sesión
+  });
 });
-
 module.exports = router;

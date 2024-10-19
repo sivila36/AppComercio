@@ -1,0 +1,84 @@
+extends layout
+
+block content
+  .dashboard-content
+    .dashboard-header
+      h1 Dashboard de Administración
+      button.logout-btn(onclick="window.location.href='/auth/logout'") Logout
+    h2 Usuarios
+    table
+      thead
+        tr
+          th Nombre
+          th Email
+          th Rol
+          th Acciones
+      tbody
+        each user in users
+          tr
+            td= user.name
+            td= user.email
+            td= user.role
+            td
+              //a(href=`/users/edit/${user._id}`) Editar
+              button.btn.btn-danger(onclick=`deleteUser('${user._id}')`) Eliminar
+    a.btn.btn-primary(href="/users/new") Nuevo Usuario
+
+    h2 Productos
+    table
+      thead
+        tr
+          th Nombre
+          th Stock
+          th Precio
+          th Acciones
+      tbody
+        each product in products
+          tr
+            td= product.name
+            td= product.stock
+            td= product.price
+            td
+              //a(href=`/admin/products/edit/${product._id}`) Editar
+              form(action=`/admin/products/${product._id}?_method=DELETE`, method="POST")
+                button(type="submit") Eliminar
+    a.btn.btn-primary(href="/admin/products/new") Nuevo Producto
+
+    h2 Órdenes
+    table
+      thead
+        tr
+          th ID
+          th Usuario
+          th Total
+          th Estado
+          th Acciones
+      tbody
+        each order in orders
+          tr
+            td= order._id
+            td= order.user.name
+            td= order.total
+            td= order.status
+            td
+              //a(href=`/admin/orders/edit/${order._id}`) Editar
+              form(action=`/admin/orders/${order._id}?_method=DELETE`, method="POST")
+                button(type="submit") Eliminar
+
+  script.
+      function deleteUser(userId) {
+        fetch(`/users/${userId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(response => {
+          if (response.ok) {
+            location.reload(); // Recargar la página después de eliminar
+          } else {
+            alert('Error al eliminar el usuario');
+          }
+        })
+        .catch(error => console.error('Error:', error));
+      }
