@@ -12,7 +12,7 @@ var orderSchema = new Schema ({
     status: {
         type: String,
         enum: ["Recibido" , "Procesando", "Cancelado" , "Enviado" ],
-        default: ""},
+        default: "Recibido"},
 })
 
 module.exports = mongoose.model("Order", orderSchema);

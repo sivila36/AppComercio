@@ -25,12 +25,32 @@ exports.checkout = async (req, res) => {
   try {
       const order = await orderService.processCheckout(userId, cart);
       req.session.cart = []; // Limpiar carrito después del checkout
-      res.redirect('/order/confirmation');
+      // Redirigir a la vista de confirmación de pedido
+      res.redirect(`/order/confirmation/${order._id}`);
+      //res.redirect('/order/confirmation');
   } catch (error) {
       res.status(500).send('Error processing order: ' + error.message);
   }
 };
 
+//Controlador para confirmacion de carrito
+exports.orderConfirmation = async (req, res) => {
+  const { orderId } = req.params;
+
+  try {
+    // Buscar la orden por ID
+    const order = await orderService.getOrderById(orderId);
+
+    if (!order) {
+      return res.status(404).send('Order not found');
+    }
+
+    // Renderizar la vista de confirmación
+    res.render('orderConfirmation', { order });
+  } catch (error) {
+    res.status(500).send('Error fetching order details: ' + error.message);
+  }
+};
 
 // Crear una orden
 exports.createOrder = async (req, res) => {

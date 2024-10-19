@@ -8,7 +8,7 @@ block content
         p= item.name
         p Cantidad: #{item.quantity}
         p Precio: $#{item.price * item.quantity}
-    form(method="post", action="/checkout")
+    form(method="post", action="/orders/checkout")
       button(type="submit") Pagar
   else
     p Tu carrito esta vacio

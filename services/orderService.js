@@ -29,7 +29,7 @@ exports.processCheckout = async (userId, cart) => {
       throw new Error('Cart is empty');
   }
 
-  const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
   const order = new Order({
       userId,
@@ -37,7 +37,7 @@ exports.processCheckout = async (userId, cart) => {
           productId: item.productId,
           quantity: item.quantity
       })),
-      total
+      totalPrice
   });
 
   await order.save();
