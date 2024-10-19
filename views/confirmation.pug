@@ -4,7 +4,7 @@ block content
   h1 Confirmación de Pedido
   p Tu pedido ha sido confirmado exitosamente.
   p Pedido ID: #{order._id}
-  p Total a pagar: $#{order.total}
+  p Total a pagar: $#{order.totalPrice}
 
   h2 Detalles del Pedido
   each product in order.products

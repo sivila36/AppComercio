@@ -5,7 +5,7 @@ const orderController = require('../controllers/orderController');
 router.post('/cart/add', orderController.addToCart);
 router.post('/checkout', orderController.checkout);
 //router.get('/checkout', orderController.checkout);
-router.get('/order/confirmation/:orderId', orderController.orderConfirmation);
+router.get('/confirmation/:orderId', orderController.orderConfirmation);
 
 
 

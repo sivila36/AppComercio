@@ -4,12 +4,12 @@ const Product = require('../models/Product');
 
 // Controlador para añadir producto al carrito
 exports.addToCart = async (req, res) => {
-  const { productId, quantity } = req.body;
+  const { productId, quantity, price} = req.body;
   const userId = req.session.user._id;
 
   try {
       let cart = req.session.cart || [];
-      cart = await orderService.addProductToCart(cart, productId, quantity);
+      cart = await orderService.addProductToCart(cart, productId, quantity, price);
       req.session.cart = cart;
       res.redirect('/cart');
   } catch (error) {
@@ -26,8 +26,7 @@ exports.checkout = async (req, res) => {
       const order = await orderService.processCheckout(userId, cart);
       req.session.cart = []; // Limpiar carrito después del checkout
       // Redirigir a la vista de confirmación de pedido
-      res.redirect(`/order/confirmation/${order._id}`);
-      //res.redirect('/order/confirmation');
+      res.redirect(`/orders/confirmation/${order._id}`);
   } catch (error) {
       res.status(500).send('Error processing order: ' + error.message);
   }
@@ -36,6 +35,8 @@ exports.checkout = async (req, res) => {
 //Controlador para confirmacion de carrito
 exports.orderConfirmation = async (req, res) => {
   const { orderId } = req.params;
+
+  console.log('Order ID:', orderId);  // Agrega esto para ver si el ID se está pasando
 
   try {
     // Buscar la orden por ID
@@ -46,7 +47,7 @@ exports.orderConfirmation = async (req, res) => {
     }
 
     // Renderizar la vista de confirmación
-    res.render('orderConfirmation', { order });
+    res.render('confirmation', { order });
   } catch (error) {
     res.status(500).send('Error fetching order details: ' + error.message);
   }
