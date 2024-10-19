@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require("../models/User");
 
 // Crear un usuario
 exports.createUser = async (userData) => {
@@ -21,7 +21,10 @@ exports.getUserById = async (id) => {
 
 // Actualizar un usuario por ID
 exports.updateUserById = async (id, userData) => {
-  const user = await User.findByIdAndUpdate(id, userData, { new: true, runValidators: true });
+  const user = await User.findByIdAndUpdate(
+    id,
+    userData /*, { new: true, runValidators: true }*/
+  );
   return user;
 };
 
