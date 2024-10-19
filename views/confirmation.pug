@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1 Confirmación de Pedido
+  p Tu pedido ha sido confirmado exitosamente.
+  p Pedido ID: #{order._id}
+  p Total a pagar: $#{order.totalPrice}
+
+  h2 Detalles del Pedido
+  each product in order.products
+    div.product-item
+      p Producto: #{product.name}
+      p Cantidad: #{product.quantity}
+      p Precio por unidad: $#{product.price}
+      p Total: $#{product.price * product.quantity}
+
+  a(href="/") Volver al inicio
