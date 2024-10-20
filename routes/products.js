@@ -1,34 +1,24 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const productController = require('../controllers/productController');
-//const Product = require('../models/productModel');
+const productController = require("../controllers/productController");
 
-// Crear un producto
-router.post('/', productController.createProduct);
+router.post("/", productController.createProduct);
 
-// Obtener todos los productos
-//router.get('/', productController.getAllProducts);
+router.get("/", productController.getProducts);
 
-// Obtener algunos productos
-router.get('/', productController.getProducts);
+router.get("/dashboard", async (req, res) => {
+  try {
+    const products = await productController.getAllProducts(req, res);
+    res.render("product", { products });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
-//Con dashboard
-router.get('/dashboard', async (req, res) => {
-    try {
-        const products = await productController.getAllProducts(req, res);
-        res.render('product', { products });
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  });
+router.get("/:id", productController.getProductById);
 
-// Obtener un producto por ID
-router.get('/:id', productController.getProductById);
+router.put("/:id", productController.updateProductById);
 
-// Actualizar un producto por ID
-router.put('/:id', productController.updateProductById);
-
-// Eliminar un producto por ID
-router.delete('/:id', productController.deleteProductById);
+router.delete("/:id", productController.deleteProductById);
 
 module.exports = router;

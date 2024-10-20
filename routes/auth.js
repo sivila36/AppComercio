@@ -24,7 +24,6 @@ router.get("/client", isAuthenticated, (req, res) => {
   }
 });
 
-// Ruta de registro
 router.post("/", async (req, res) => {
   const { name, email, password } = req.body;
   let errors = [];
@@ -53,43 +52,35 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Ruta de login
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   let errors = [];
 
-  // Validar si todos los campos están llenos
   if (!email || !password) {
     errors.push({ msg: "Por favor, llena todos los campos" });
     return res.render("login", { errors, email });
   }
 
   try {
-    // Buscar al usuario por email
     const user = await User.findOne({ email });
 
     if (!user) {
-      // Si el usuario no existe
       errors.push({ msg: "Usuario no encontrado" });
       return res.render("login", { errors, email });
     }
 
-    // Verificar contraseña
     if (password !== user.password) {
       errors.push({ msg: "Contraseña incorrecta" });
       return res.render("login", { errors, email });
     }
 
-    // Si la autenticación es exitosa, almacenar la sesión del usuario
     req.session.user = user;
 
-    // Redirigir según el rol del usuario
     if (user.role === "admin") {
       res.redirect("/admin/dashboard");
     } else if (user.role === "client") {
       res.redirect("/products");
     } else {
-      // Si el rol no es reconocido, podrías redirigir a una página de error o al inicio
       res.redirect("/");
     }
   } catch (err) {
@@ -98,46 +89,14 @@ router.post("/login", async (req, res) => {
   }
 });
 
-/* Ruta de login
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  let errors = [];
-
-  if (!email || !password) {
-    errors.push({ msg: "Por favor, llena todos los campos" });
-  }
-
-  if (errors.length > 0) {
-    res.render("login", { errors, email });
-  } else {
-    try {
-      const user = await User.findOne({ email });
-      if (!user) {
-        errors.push({ msg: "Usuario no encontrado" });
-        res.render("login", { errors, email });
-      } else {
-        req.session.user = { userId: user._id, role: user.role };
-        //req.flash("success_msg", "Has iniciado sesión correctamente");
-        res.redirect("/");
-        //errors.push({ msg: 'Contraseña incorrecta' });
-        //res.render("login", { errors, email });
-      }
-    } catch (err) {
-      console.error(err);
-      console.log(err);
-      res.redirect("/auth/login");
-    }
-  }
-});*/
-
 // Ruta de logout
 router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
-      return res.redirect("/dashboard"); // O a cualquier página si falla el logout
+      return res.redirect("/dashboard");
     }
-    res.clearCookie("connect.sid"); // Asegúrate de limpiar la cookie de sesión
-    res.redirect("/auth/login"); // Redirige al login después de cerrar la sesión
+    res.clearCookie("connect.sid");
+    res.redirect("/auth/login");
   });
 });
 module.exports = router;

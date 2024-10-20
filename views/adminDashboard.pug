@@ -22,7 +22,7 @@ block content
             td
               //a(href=`/users/edit/${user._id}`) Editar
               button.btn.btn-danger(onclick=`deleteUser('${user._id}')`) Eliminar
-    a.btn.btn-primary(href="/users/new") Nuevo Usuario
+    //-a.btn.btn-primary(href="/users/new") Nuevo Usuario
 
     h2 Productos
     table
@@ -40,9 +40,8 @@ block content
             td= product.price
             td
               //a(href=`/admin/products/edit/${product._id}`) Editar
-              form(action=`/admin/products/${product._id}?_method=DELETE`, method="POST")
-                button(type="submit") Eliminar
-    a.btn.btn-primary(href="/admin/products/new") Nuevo Producto
+              button.btn.btn-danger(onclick=`deleteProduct('${product._id}')`) Eliminar
+    a.btn.btn-add-product(href="/admin/products/new") Nuevo Producto
 
     h2 Órdenes
     table
@@ -62,8 +61,7 @@ block content
             td= order.status
             td
               //a(href=`/admin/orders/edit/${order._id}`) Editar
-              form(action=`/admin/orders/${order._id}?_method=DELETE`, method="POST")
-                button(type="submit") Eliminar
+              button.btn.btn-danger(onclick=`deleteOrder('${order._id}')`) Eliminar
 
   script.
       function deleteUser(userId) {
@@ -75,9 +73,41 @@ block content
         })
         .then(response => {
           if (response.ok) {
-            location.reload(); // Recargar la página después de eliminar
+            location.reload();
           } else {
             alert('Error al eliminar el usuario');
+          }
+        })
+        .catch(error => console.error('Error:', error));
+      }
+      function deleteProduct(productId) {
+        fetch(`/products/${productId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(response => {
+          if (response.ok) {
+            location.reload(); // Recargar la página después de eliminar
+          } else {
+            alert('Error al eliminar el producto');
+          }
+        })
+        .catch(error => console.error('Error:', error));
+      }
+            function deleteOrder(orderId) {
+        fetch(`/orders/${orderId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(response => {
+          if (response.ok) {
+            location.reload(); // Recargar la página después de eliminar
+          } else {
+            alert('Error al eliminar el pedido');
           }
         })
         .catch(error => console.error('Error:', error));

@@ -9,3 +9,7 @@ exports.getDashboard = async (req, res) => {
 
   res.render("adminDashboard", { users, products, orders });
 };
+
+exports.newProductForm = async (req, res) => {
+  res.render("addProduct");
+};

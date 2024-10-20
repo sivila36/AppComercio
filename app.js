@@ -14,6 +14,7 @@ var productsRouter = require("./routes/products");
 var ordersRouter = require("./routes/orders");
 var cartRouter = require("./routes/cart");
 const adminRouter = require("./routes/admin");
+var apiRouter = require("./routes/apis");
 
 var app = express();
 
@@ -26,7 +27,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-//app.use(methodOverride("_method"));
 
 app.use(
   session({
@@ -44,10 +44,11 @@ app.use("/users", usersRouter);
 app.use("/products", productsRouter);
 app.use("/orders", ordersRouter);
 app.use("/api/users", usersRouter);
-app.use("/api/products", productsRouter);
+//app.use("/api/products", productsRouter);
 app.use("/api/orders", ordersRouter);
 app.use("/cart", cartRouter);
 app.use("/admin", adminRouter);
+app.use("/api", apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

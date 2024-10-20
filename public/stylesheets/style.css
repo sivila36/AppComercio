@@ -372,7 +372,6 @@ a.btn.btn-primary {
   justify-content: center;
 }
 
-
 /* Contenedor principal de la vista del carrito */
 .cart-container {
   max-width: 1200px;
@@ -449,4 +448,9 @@ a.btn.btn-primary {
 
 .checkout-button:active {
   background-color: #004085;
+}
+
+.btn-add-product {
+  display: inline-block;
+  width: 7.5rem;
 }

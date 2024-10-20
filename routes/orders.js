@@ -1,27 +1,19 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const orderController = require('../controllers/orderController');
+const orderController = require("../controllers/orderController");
 
-router.post('/cart/add', orderController.addToCart);
-router.post('/checkout', orderController.checkout);
-//router.get('/checkout', orderController.checkout);
-router.get('/confirmation/:orderId', orderController.orderConfirmation);
+router.post("/cart/add", orderController.addToCart);
+router.post("/checkout", orderController.checkout);
+router.get("/confirmation/:orderId", orderController.orderConfirmation);
 
+router.post("/", orderController.createOrder);
 
+router.get("/", orderController.getAllOrders);
 
-// Crear una orden
-router.post('/', orderController.createOrder);
+router.get("/:id", orderController.getOrderById);
 
-// Obtener todas las órdenes
-router.get('/', orderController.getAllOrders);
+router.put("/:id", orderController.updateOrderById);
 
-// Obtener una orden por ID
-router.get('/:id', orderController.getOrderById);
-
-// Actualizar una orden por ID
-router.put('/:id', orderController.updateOrderById);
-
-// Eliminar una orden por ID
-router.delete('/:id', orderController.deleteOrderById);
+router.delete("/:id", orderController.deleteOrderById);
 
 module.exports = router;
