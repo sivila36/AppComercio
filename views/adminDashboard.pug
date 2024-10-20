@@ -57,8 +57,8 @@ block content
         each order in orders
           tr
             td= order._id
-            td= order.user.name
-            td= order.total
+            td= order.userId
+            td= order.totalPrice
             td= order.status
             td
               //a(href=`/admin/orders/edit/${order._id}`) Editar
