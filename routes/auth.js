@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require('bcrypt');
 const userController = require("../controllers/userController");
 const User = require("../models/User");
 const { isAuthenticated, isAdmin } = require("../middlewares/auth");
+
 
 router.get("/register", function (req, res, next) {
   res.render("register");
@@ -24,6 +26,7 @@ router.get("/client", isAuthenticated, (req, res) => {
   }
 });
 
+
 router.post("/", async (req, res) => {
   const { name, email, password } = req.body;
   let errors = [];
@@ -42,7 +45,7 @@ router.post("/", async (req, res) => {
         console.log(errors);
         res.render("register", { errors, name, email });
       } else {
-        userController.createUser;
+        await userController.createUser(req, res);
         res.redirect("/auth/login");
       }
     } catch (err) {
@@ -51,6 +54,9 @@ router.post("/", async (req, res) => {
     }
   }
 });
+
+
+
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -69,7 +75,14 @@ router.post("/login", async (req, res) => {
       return res.render("login", { errors, email });
     }
 
-    if (password !== user.password) {
+    if (!user.password) {
+      errors.push({ msg: "Error interno: falta el hash de la contraseña" });
+      return res.render("login", { errors, email });
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
       errors.push({ msg: "Contraseña incorrecta" });
       return res.render("login", { errors, email });
     }
@@ -88,6 +101,8 @@ router.post("/login", async (req, res) => {
     res.redirect("/auth/login");
   }
 });
+
+
 
 // Ruta de logout
 router.get("/logout", (req, res) => {
