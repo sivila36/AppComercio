@@ -4,6 +4,8 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const mongoose = require("mongoose");
+const passport = require('passport'); 
+
 
 const session = require("express-session");
 
@@ -36,6 +38,9 @@ app.use(
     cookie: { secure: false }, // Coloca 'true' si usas HTTPS
   })
 );
+app.use(passport.initialize()); 
+app.use(passport.session());
+require('./config/passport');
 
 app.use("/", indexRouter);
 app.use("/auth", authRouter);

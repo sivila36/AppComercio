@@ -2,8 +2,8 @@ const userService = require("../services/userService");
 
 exports.createUser = async (req, res) => {
   try {
-    const newUser = await userService.createUser(req.body);
-    res.status(201).json(newUser);
+    await userService.createUser(req.body);
+    res.status(201).redirect("/auth/login");
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
