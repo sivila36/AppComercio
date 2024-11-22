@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const passport = require('passport');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const userController = require("../controllers/userController");
 const User = require("../models/User");
 const { isAuthenticated, isAdmin } = require("../middlewares/auth");
@@ -56,52 +58,32 @@ router.post("/", async (req, res) => {
 });
 
 
-
-
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  let errors = [];
-
-  if (!email || !password) {
-    errors.push({ msg: "Por favor, llena todos los campos" });
-    return res.render("login", { errors, email });
-  }
-
-  try {
-    const user = await User.findOne({ email });
-
+router.post("/login", (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
     if (!user) {
-      errors.push({ msg: "Usuario no encontrado" });
-      return res.render("login", { errors, email });
+      return res.redirect('/auth/login');
     }
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(err);
+      }
+      // Guardar el usuario en la sesión
+      req.session.user = user;
 
-    if (!user.password) {
-      errors.push({ msg: "Error interno: falta el hash de la contraseña" });
-      return res.render("login", { errors, email });
-    }
-
-    const passwordMatch = await bcrypt.compare(password, user.password);
-
-    if (!passwordMatch) {
-      errors.push({ msg: "Contraseña incorrecta" });
-      return res.render("login", { errors, email });
-    }
-
-    req.session.user = user;
-
-    if (user.role === "admin") {
-      res.redirect("/admin/dashboard");
-    } else if (user.role === "client") {
-      res.redirect("/products");
-    } else {
-      res.redirect("/");
-    }
-  } catch (err) {
-    console.error(err);
-    res.redirect("/auth/login");
-  }
+      // Redirigir según el rol del usuario
+      if (user.role === 'admin') {
+        return res.redirect('/admin/dashboard');
+      } else if (user.role === 'client') {
+        return res.redirect('/products');
+      } else {
+        return res.redirect('/');
+      }
+    });
+  })(req, res, next);
 });
-
 
 
 // Ruta de logout
