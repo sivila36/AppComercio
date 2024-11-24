@@ -3,7 +3,7 @@ extends layout
 block content
   .register-container
     h2 Registro
-    form(action='/users' method='POST')
+    form(action='/auth/register' method='POST')
       .form-group
         label(for='name') Nombre
         input.form-control(type='text' name='name' id='name' required)
