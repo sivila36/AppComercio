@@ -1,12 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const passport = require('passport');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const passport = require("passport");
+const jwt = require("jsonwebtoken");
 const userController = require("../controllers/userController");
 const User = require("../models/User");
 const { isAuthenticated, isAdmin } = require("../middlewares/auth");
-
 
 router.get("/register", function (req, res, next) {
   res.render("register");
@@ -28,63 +26,60 @@ router.get("/client", isAuthenticated, (req, res) => {
   }
 });
 
-
-router.post("/", async (req, res) => {
+router.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
   let errors = [];
 
   if (!name || !email || !password) {
     errors.push({ msg: "Por favor, llena todos los campos" });
+    return res.render("register", { errors, name, email });
   }
 
-  if (errors.length > 0) {
-    res.render("register", { errors, name, email });
-  } else {
-    try {
-      let user = await User.findOne({ email });
-      if (user) {
-        errors.push({ msg: "El correo ya está registrado" });
-        console.log(errors);
-        res.render("register", { errors, name, email });
-      } else {
+  try {
+    let user = await User.findOne({ email });
+    if (user) {
+      errors.push({ msg: "El correo ya está registrado" });
+      console.log(errors);
+      return res.status(400).json({ error: "El correo ya está registrado" });
+    } else {
+      try {
         await userController.createUser(req, res);
-        res.redirect("/auth/login");
+      } catch (err) {
+        console.error("Error en el controlador createUser:", err.message);
+        return res.status(400).json({ error: err.message });
       }
-    } catch (err) {
-      console.error(err);
-      res.redirect("/");
     }
+  } catch (err) {
+    console.error("Error en la búsqueda del usuario:", err);
+    return res.status(500).json({ error: "Error del servidor" });
   }
 });
 
-
 router.post("/login", (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
+  passport.authenticate("local", (err, user, info) => {
     if (err) {
       return next(err);
     }
     if (!user) {
-      return res.redirect('/auth/login');
+      return res.redirect("/auth/login");
     }
     req.logIn(user, (err) => {
       if (err) {
         return next(err);
       }
-      // Guardar el usuario en la sesión
+
       req.session.user = user;
 
-      // Redirigir según el rol del usuario
-      if (user.role === 'admin') {
-        return res.redirect('/admin/dashboard');
-      } else if (user.role === 'client') {
-        return res.redirect('/products');
+      if (user.role === "admin") {
+        return res.redirect("/admin/dashboard");
+      } else if (user.role === "client") {
+        return res.redirect("/products");
       } else {
-        return res.redirect('/');
+        return res.redirect("/");
       }
     });
   })(req, res, next);
 });
-
 
 // Ruta de logout
 router.get("/logout", (req, res) => {
