@@ -18,11 +18,9 @@ exports.addToCart = async (req, res) => {
     res.json({ success: true, cart });
   } catch (error) {
     console.log(error);
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Error adding product to cart: " + error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Error agregando producto al carrito: " + error.message,
+    });
   }
 };

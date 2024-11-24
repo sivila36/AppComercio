@@ -1,5 +1,5 @@
-const bcrypt = require('bcrypt');
-const User = require('../models/User');
+const bcrypt = require("bcrypt");
+const User = require("../models/User");
 
 exports.createUser = async (userData) => {
   const saltRounds = 10;
@@ -8,13 +8,13 @@ exports.createUser = async (userData) => {
   const newUser = new User({
     name: userData.name,
     email: userData.email,
-    password: passwordHash
+    password: passwordHash,
+    role: userData.role || "client",
   });
 
   await newUser.save();
   return newUser;
 };
-
 
 exports.getAllUsers = async () => {
   const users = await User.find();
