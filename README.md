@@ -2,7 +2,7 @@
 
 ## *IFTS 29*
 ##  Materia: Desarrollo BackEnd
-- **Profesor: Emir Quinteros**
+- **Profesor: Emir Eliezer Garcia Ontiveros**
 
 ## 📜 Integrantes
 - **Ezequiel Rodolfo Garriga**
@@ -49,7 +49,7 @@ Para ejecutar el proyecto localmente, sigue los siguientes pasos:
 3. **Configuración de Variables de Entorno:** Crea un archivo .env en la raíz del proyecto y añade las siguientes variables de entorno según sea necesario:
 
    PORT=3001
-=> DATABASE_URL=mongodb://localhost:3001/nombre_de_tu_base_de_datos
+   MONGO_URI=// direccion local MongoDB Compass o de Atlas
 
 4. **Iniciar el Servidor:** Para iniciar el servidor en modo desarrollo, ejecuta:
 
@@ -74,4 +74,4 @@ DELETE /api/users/:id - Eliminar un cliente por ID
 
 ## 🔗 Enlace del proyecto en VERCEL
 
-https://
+https://app-comercio-alpha.vercel.app/
