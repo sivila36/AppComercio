@@ -3,7 +3,7 @@ const app = require("../app"); // Importa la app principal
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const User = require("../models/User");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 let mongoServer;
 
